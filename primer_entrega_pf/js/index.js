@@ -13,12 +13,12 @@ class Articulo {
 
   constructor(producto, costo, peso, marca, descripcion) {
     this.producto = producto;
-    this.costo = parseInt(costo);
+    this.costo = costo;
     this.peso = peso;
     this.marca = marca;
     this.descripcion = descripcion;
   }
-
+  // En base al costo del producto, este metodo determinara un porcentaje de ganancia predeterminado.
   calcularPrecioDeVenta() {
     if(this.costo > 0 && this.costo < 2000) {
       porcentajeGanancia = 0.4;
@@ -60,11 +60,13 @@ const producto2 = new Articulo(
   Posee un peso de ${this.peso} excelente para generar masa muscular, a tan solo un precio de $${this.costo}!`
 );
 
+// De esta manera, generamos un array a modo de carrito de compras donde se van agrupando los productos.
 let productosElegidos = [
   producto1,
   producto2
 ];
 
+// Solicitamos algunos datos para mejorar la experiencia de usuario.
 let nombre = prompt("Ingrese su nombre");
 let apellido = prompt("Ingrese su apellido");
 let eleccion = prompt(
@@ -77,6 +79,7 @@ let eleccion = prompt(
 let total = 0;
 let seleccion = [];
 
+// Esta funcion nos sirve para iterar la seleccion de productos del usuario y los va sumando al array vacio de arriba, hasta que este digite NO.
 function eleccionDeProductos() {
   while(eleccion != "NO") {
 
@@ -98,18 +101,23 @@ function eleccionDeProductos() {
 
 eleccionDeProductos();
 
+// TNA significa Tasa Nominal Anual, es la tasa que por lo general nos indican los bancos a la hora de ofrecernos sus servicios.
 let tna = 0.3;
 
+// Funcion utilizada para convertir la tasa anual a mensual.
 function tasaMensual() {
   return (tna / 365) * 30;
 }
 
 let nPeriodo = 0;
 
+// La tasa es nominal (de interes simple), por lo tanto, no esta considerando la verdadera forma de los intereses en una financiacion, la cual es de interes compuesto.
+// Mediante esta funcion convertimos la tasa nominal a efectiva.
 function conversionTasaEfectiva(nPeriodo) {
   return ((1 + tasaMensual()) ** nPeriodo) - 1;
 }
 
+// Dependiendo del digito ingresado por el usuario, esta funcion nos retorna el interes predeterminado para esa cantidad de cuotas.
 function calcularInteres(digito) {
   if(digito === 3) {
     return conversionTasaEfectiva(3);
@@ -125,14 +133,20 @@ function calcularInteres(digito) {
   }
 }
 
+// Esta funcion convierte un numero ingresado por parametro a porcentaje y lo arregla con 2 decimales.
 function convertirPorcentaje(numero) {
   return (numero * 100).toFixed(2);
 }
 
+// Esta funcion tiene como base la formula de un sistema de amortizacion frances, muy utilizado en prestamos y financiaciones.
+// Nos ayudara a determinar la cuota que debera pagar el usuario dependiendo de la cantidad de meses de interes.
 function calcularCuota(monto, tasa, meses) {
   return (monto * (tasa / (1 - (1 + tasa)**-meses))).toFixed(2);
 }
 
+
+// La siguiente funcion es utilizada para determinar el metodo de pago, dandonos opciones de pagar con credito o debito.
+// Dependiendo de la opcion, nos regresara un mensaje de compra exitosa o nos dirigira a un prompt donde podremos elegir la cantidad de cuotas.
 function pagar() {
 
   let metodoPago = parseInt(prompt(`${nombre}, el monto a pagar es: $${total}.
