@@ -1,3 +1,59 @@
+// Funcion de login con validacion de usuario e intentos.
+function login() {
+  let usuario = prompt("Ingrese su usuario: ");
+  let contra = prompt("Ingrese su contraseña: ");
+  let user = '';
+  let pass = '';
+  let intentos = 3;
+
+  if (!(usuario === '' && contra === '')) {
+    alert("Por favor, ingrese nuevamente sus datos para corroborar.")
+
+    while (intentos > 0 && (usuario !== user || contra !== pass)) {
+      user = prompt("Ingrese su usuario: ");
+      pass = prompt("Ingrese su contraseña: ");
+      if (user === usuario && pass === contra) {
+        alert("Bienvenido, acceso permitido");
+
+        // Creamos un div contenedor para cada producto.
+        for (let producto of productosElegidos) {
+          let contenedor = document.createElement("div");
+          contenedor.innerHTML = `
+            <h4>${producto.producto}</h4>
+            <p>Precio: $${producto.calcularPrecioDeVenta()}</p>
+            <p>Marca: ${producto.marca}</p>
+            <p>${producto.descripcion}</p>`;
+          document.body.appendChild(contenedor);
+        }
+
+        let comprar = document.createElement("button");
+        comprar.innerHTML = "Comprar";
+        comprar.setAttribute("id", "comprar");
+        document.body.appendChild(comprar);
+        comprar.onclick = () => {eleccionDeProductos()}
+      }
+
+      else {
+        alert(`Usuario o contraseña incorrectos, te quedan ${intentos--} intentos`);
+      }
+    }
+  }
+}
+
+// Cuando el usuario haga click en Iniciar sesion se le permitira ingresar a comprar.
+let iniciar = document.createElement("button");
+iniciar.innerHTML = "Iniciar sesión";
+iniciar.setAttribute("id", "iniciar");
+document.body.appendChild(iniciar);
+iniciar.onclick = () => {login()}
+
+// Cambio del mensaje de bienvenida.
+let h1 = document.getElementById("bienvenida");
+h1.innerHTML = "<h2>Bienvenido a Welfare</h2>";
+setTimeout(() => {
+  h1.innerText = "Welfare: tu siguiente nivel."
+}, 3000);
+
 // Declaracion y asignacion de la variable iva, unico impuesto a tener en cuenta para la facturacion de la compra.
 let iva = 0.21;
 
@@ -8,7 +64,6 @@ let porcentajeGanancia = 0;
 function calcularIva(precio) {
   return precio * (1 + iva);
 }
-
 class Articulo {
 
   constructor(producto, costo, peso, marca, descripcion) {
@@ -47,8 +102,8 @@ const producto1 = new Articulo(
   5000,
   "5 KG",
   "Fit",
-  `La ${this.producto} de la marca ${this.marca} es recomendada por su agarre y dimensiones.
-  Posee un peso de ${this.peso} excelente para principiantes, a tan solo un precio de $${this.costo}!`
+  `La mancuerna de la marca Fit es recomendada por su agarre y dimensiones.
+  Posee un peso de 5 KG excelente para principiantes.`
 );
 
 const producto2 = new Articulo(
@@ -56,8 +111,8 @@ const producto2 = new Articulo(
   3000,
   "2.9 KG",
   "Re-Groso",
-  `La ${this.producto} de la marca ${this.marca} es recomendada por su alto contenido de aminoacidos y su sabor. 
-  Posee un peso de ${this.peso} excelente para generar masa muscular, a tan solo un precio de $${this.costo}!`
+  `La proteina de la marca Re-Groso es recomendada por su alto contenido de aminoacidos y su sabor. 
+  Posee un peso de 2.9 KG, excelente para generar masa muscular.`
 );
 
 // De esta manera, generamos un array a modo de carrito de compras donde se van agrupando los productos.
@@ -69,18 +124,18 @@ let productosElegidos = [
 // Solicitamos algunos datos para mejorar la experiencia de usuario.
 let nombre = prompt("Ingrese su nombre");
 let apellido = prompt("Ingrese su apellido");
-let eleccion = prompt(
-  `Hola ${nombre}, bienvenid@ a Welfare!
-  Selecciona los productos que desees.
-  Digite 1 para: ${producto1.producto} $${producto1.calcularPrecioDeVenta()}
-  Digite 2 para: ${producto2.producto} $${producto2.calcularPrecioDeVenta()}.`
-);
 
 let total = 0;
 let seleccion = [];
 
 // Esta funcion nos sirve para iterar la seleccion de productos del usuario y los va sumando al array vacio de arriba, hasta que este digite NO.
 function eleccionDeProductos() {
+  let eleccion = prompt(
+    `Hola ${nombre}, bienvenid@ a Welfare!
+    Selecciona los productos que desees.
+    Digite 1 para: ${producto1.producto} $${producto1.calcularPrecioDeVenta()}
+    Digite 2 para: ${producto2.producto} $${producto2.calcularPrecioDeVenta()}.`
+  );
   while(eleccion != "NO") {
 
     console.log(
@@ -97,9 +152,12 @@ function eleccionDeProductos() {
     );
   }
   console.log(`${nombre}, el total a pagar es: $${total}`);
+  let pago = document.createElement("button");
+  pago.innerHTML = "Pagar";
+  pago.setAttribute("id", "pagar");
+  document.body.appendChild(pago);
+  pago.onclick = () => {pagar()}
 }
-
-eleccionDeProductos();
 
 // TNA significa Tasa Nominal Anual, es la tasa que por lo general nos indican los bancos a la hora de ofrecernos sus servicios.
 let tna = 0.3;
@@ -143,7 +201,6 @@ function convertirPorcentaje(numero) {
 function calcularCuota(monto, tasa, meses) {
   return (monto * (tasa / (1 - (1 + tasa)**-meses))).toFixed(2);
 }
-
 
 // La siguiente funcion es utilizada para determinar el metodo de pago, dandonos opciones de pagar con credito o debito.
 // Dependiendo de la opcion, nos regresara un mensaje de compra exitosa o nos dirigira a un prompt donde podremos elegir la cantidad de cuotas.
@@ -213,5 +270,3 @@ function pagar() {
     alert("No se pudo realizar su pago correctamente, por favor, vuelva a intentarlo.");
   }
 }
-
-pagar();
