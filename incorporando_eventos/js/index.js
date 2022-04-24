@@ -97,17 +97,6 @@ iniciar.setAttribute("id", "iniciar");
 document.body.appendChild(iniciar);
 iniciar.onclick = () => {login()}
 
-// let logout = document.createElement("button");
-// logout.innerHTML = "Log out";
-// logout.setAttribute("id", "logout");
-// document.body.appendChild(logout);
-// logout.onclick = () => {logout()}
-
-// function logout() {
-//   localStorage.clear();
-//   location.reload();
-// }
-
 // Cambio del mensaje de bienvenida.
 let h1 = document.getElementById("bienvenida");
 h1.innerHTML = `<h2>Welfare Home</h2>`;
