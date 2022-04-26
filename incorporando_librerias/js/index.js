@@ -87,9 +87,16 @@ function deleteBook(i) {
       createBooks();
       Swal.fire(
         'Deleted!',
-        'Your file has been deleted.',
+        'Your traveler has been deleted.',
         'success'
       )
     }
   })
 }
+
+function logout() {
+  localStorage.clear();
+  window.location.replace("http://127.0.0.1:5500/pages/login.html");
+}
+
+document.getElementById("logout").addEventListener('onclick', logout());
